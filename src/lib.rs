@@ -8,7 +8,7 @@ pub struct MyFiles {
 }
 
 pub fn split_str(my_str: &str) -> Vec<&str> {
-    my_str.split('/').collect()
+    my_str.split('-').collect()
 }
 
 pub fn get_args() -> MyFiles {
@@ -51,17 +51,19 @@ pub fn mk_dir(dir: String) -> std::io::Result<()> {
     Ok(())
 }
 
-pub fn copy_files(old_dir: String, new_dir: String) -> std::io::Result<()> {
+pub fn copy_files(old_dir: String, new_dir: String) -> Result<(), std::io::Error> {
     let files = Path::new(old_dir.as_str()).read_dir()?;
-    let mut buf_str = new_dir.clone().push('/');
+    let mut buf_str = new_dir.clone();
+    buf_str.push('/');
     for f in files {
         match f {
             Ok(f2) => {
-                buf_str.push('/').push_str("f2");
-                fs::copy(f2, buf_str)?;
-                buf_str = Path::new(buf_str).parent()?;
+                buf_str.push('/');
+                buf_str.push_str("f2");
+                fs::copy(f2.path(), &buf_str)?;
+                let _ = Path::new(buf_str.as_str()).parent(); // could it fail?
             },
-            Err(e) => Err(From::from(e)),
+            Err(e) => return Err(e),
         }
     }
 

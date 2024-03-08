@@ -20,7 +20,6 @@ fn split_test() {
 #[test]
 fn test_dir_exists() {
     use quicksplit_rs::verify_dir;
-    use std::string::String;
 
     let DIR_correct = String::from("./tests/test_dir");
     let DIR_incorrect = String::from("/test/non_existent_dir");
@@ -32,7 +31,25 @@ fn test_dir_exists() {
 #[test]
 fn test_copy_files() {
     use quicksplit_rs::copy_files;
+    use std::io::Error;
 
+    let DIR_SOURCE = String::from("./test/test_dir_copy");
+    let DIR_DESTINATION = String::from("./test/test_dir");
+
+    let res = copy_files(DIR_SOURCE, DIR_DESTINATION);
+    match res {
+        Ok(r) => assert_eq!(r, ()),
+        _ => panic!("something wrong"),
+    }
+}
+
+#[test]
+fn test_split_dir() {
+    use quicksplit_rs::new_dir;
+    let TEST_DIR_SPLIT = "test-dir-split";
+    let split_dir = new_dir(String::from(TEST_DIR_SPLIT));
+
+    assert_eq!(split_dir, String::from("test/dir/split/"));
 }
 
 // What are the different things we need to do and therefore to test?
