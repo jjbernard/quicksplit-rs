@@ -59,7 +59,7 @@ pub fn copy_files(old_dir: String, new_dir: String) -> std::io::Result<()> {
             Ok(f2) => {
                 buf_str.push('/').push_str("f2");
                 fs::copy(f2, buf_str)?;
-                buf_str = Path::new(buf_str).parent();
+                buf_str = Path::new(buf_str).parent()?;
             },
             Err(e) => Err(From::from(e)),
         }

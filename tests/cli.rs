@@ -29,6 +29,12 @@ fn test_dir_exists() {
     assert_eq!(verify_dir(DIR_incorrect), false);
 }
 
+#[test]
+fn test_copy_files() {
+    use quicksplit_rs::copy_files;
+
+}
+
 // What are the different things we need to do and therefore to test?
 // todo: 2/ split the input dir along the "-" character into a vec of strings
 // todo: 3/ create an output dir that will take the previous strings and turn them to a
