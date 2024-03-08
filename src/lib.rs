@@ -47,12 +47,25 @@ pub fn new_dir(dir: String) -> String {
 
 pub fn mk_dir(dir: String) -> std::io::Result<()> {
     let dir = new_dir(dir);
-    fs::create_dir(dir)?;
+    fs::create_dir_all(dir)?;
     Ok(())
 }
 
-pub fn copy_files(dir: String) {
-    todo!()
+pub fn copy_files(old_dir: String, new_dir: String) -> std::io::Result<()> {
+    let files = Path::new(old_dir.as_str()).read_dir()?;
+    let mut buf_str = new_dir.clone().push('/');
+    for f in files {
+        match f {
+            Ok(f2) => {
+                buf_str.push('/').push_str("f2");
+                fs::copy(f2, buf_str)?;
+                buf_str = Path::new(buf_str).parent();
+            },
+            Err(e) => Err(From::from(e)),
+        }
+    }
+
+    Ok(())
 }
 
 pub fn run() {
