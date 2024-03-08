@@ -21,33 +21,32 @@ fn split_test() {
 fn test_dir_exists() {
     use quicksplit_rs::verify_dir;
 
-    let DIR_correct = String::from("./tests/test_dir");
-    let DIR_incorrect = String::from("/test/non_existent_dir");
+    let dir_correct = String::from("./tests/test_dir");
+    let dir_incorrect = String::from("/test/non_existent_dir");
 
-    assert_eq!(verify_dir(DIR_correct), true);
-    assert_eq!(verify_dir(DIR_incorrect), false);
+    assert_eq!(verify_dir(dir_correct), true);
+    assert_eq!(verify_dir(dir_incorrect), false);
 }
 
 #[test]
 fn test_copy_files() {
     use quicksplit_rs::copy_files;
-    use std::io::Error;
 
-    let DIR_SOURCE = String::from("./test/test_dir_copy");
-    let DIR_DESTINATION = String::from("./test/test_dir");
+    let dir_source = String::from("./tests/test_dir_copy");
+    let dir_destination = String::from("./tests/test_dir");
 
-    let res = copy_files(DIR_SOURCE, DIR_DESTINATION);
+    let res = copy_files(dir_source, dir_destination);
     match res {
         Ok(r) => assert_eq!(r, ()),
-        _ => panic!("something wrong"),
+        Err(e)=> panic!("{} something wrong", e),
     }
 }
 
 #[test]
 fn test_split_dir() {
     use quicksplit_rs::new_dir;
-    let TEST_DIR_SPLIT = "test-dir-split";
-    let split_dir = new_dir(String::from(TEST_DIR_SPLIT));
+    let test_dir_split = "test-dir-split";
+    let split_dir = new_dir(String::from(test_dir_split));
 
     assert_eq!(split_dir, String::from("test/dir/split/"));
 }

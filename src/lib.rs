@@ -59,9 +59,10 @@ pub fn copy_files(old_dir: String, new_dir: String) -> Result<(), std::io::Error
         match f {
             Ok(f2) => {
                 buf_str.push('/');
-                buf_str.push_str("f2");
+                buf_str.push_str(f2.file_name().into_string().unwrap().as_str());
+                println!("{}", buf_str);
                 fs::copy(f2.path(), &buf_str)?;
-                let _ = Path::new(buf_str.as_str()).parent(); // could it fail?
+                let buf_str = Path::new(buf_str.as_str()).parent()?; // could it fail?
             },
             Err(e) => return Err(e),
         }
