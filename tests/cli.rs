@@ -73,4 +73,3 @@ fn test_rm_dir() {
     assert!(res.is_ok());
     assert!(!Path::new(dir.as_str()).exists());
 }
-

@@ -1,6 +1,6 @@
 use clap::{Arg, ArgAction, Command};
-use std::path::Path;
 use std::fs;
+use std::path::Path;
 
 #[derive(Debug)]
 pub struct MyFiles {
@@ -68,7 +68,7 @@ pub fn run() {
     for f in dirs.files {
         if !verify_dir(&f) {
             eprintln!("{:?} is not a directory", f);
-            continue
+            continue;
         } else {
             let new_dir = new_dir_name(&f);
             let res_create = mk_dir(&new_dir);
@@ -81,12 +81,22 @@ pub fn run() {
                             let res_rm = rm_dir(&f);
                             match res_rm {
                                 Ok(()) => continue,
-                                _ => { eprintln!("Error removing directory"); continue },
-                            }},
-                        _ => { eprintln!("Error moving file"); continue}
+                                _ => {
+                                    eprintln!("Error removing directory");
+                                    continue;
+                                }
+                            }
+                        }
+                        _ => {
+                            eprintln!("Error moving file");
+                            continue;
+                        }
                     }
-                },
-                _ => { eprintln!("Error creating directory"); continue }
+                }
+                _ => {
+                    eprintln!("Error creating directory");
+                    continue;
+                }
             }
         }
     }
