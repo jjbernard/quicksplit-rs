@@ -34,7 +34,7 @@ pub fn verify_dir(dir: String) -> bool {
     Path::new(dir.as_str()).is_dir()
 }
 
-pub fn new_dir(dir: String) -> String {
+pub fn new_dir_name(dir: String) -> String {
     let dir_split = split_str(dir.as_str());
     let mut dir_string = String::new();
     for w in dir_split {
@@ -46,28 +46,16 @@ pub fn new_dir(dir: String) -> String {
 }
 
 pub fn mk_dir(dir: String) -> std::io::Result<()> {
-    let dir = new_dir(dir);
+    let dir = new_dir_name(dir);
     fs::create_dir_all(dir)?;
     Ok(())
 }
 
-pub fn copy_files(old_dir: String, new_dir: String) -> Result<(), std::io::Error> {
-    let files = Path::new(old_dir.as_str()).read_dir()?;
-    let mut buf_str = new_dir.clone();
-    buf_str.push('/');
-    for f in files {
-        match f {
-            Ok(f2) => {
-                buf_str.push('/');
-                buf_str.push_str(f2.file_name().into_string().unwrap().as_str());
-                println!("{}", buf_str);
-                fs::copy(f2.path(), &buf_str)?;
-                let buf_str = Path::new(buf_str.as_str()).parent()?; // could it fail?
-            },
-            Err(e) => return Err(e),
-        }
-    }
+pub fn move_files(from: String, to: String) -> std::io::Result<()> {
+    let path_from = Path::new(from.as_str());
+    let path_to = Path::new(to.as_str());
 
+    fs::rename(from, to)?;
     Ok(())
 }
 

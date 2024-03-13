@@ -1,3 +1,6 @@
+use std::path::Path;
+use quicksplit_rs::{mk_dir, move_files};
+
 #[cfg(test)]
 #[test]
 fn split_test() {
@@ -29,34 +32,36 @@ fn test_dir_exists() {
 }
 
 #[test]
-fn test_copy_files() {
-    use quicksplit_rs::copy_files;
+fn test_move_files() {
+    use quicksplit_rs::move_files;
 
     let dir_source = String::from("./tests/test_dir_copy");
     let dir_destination = String::from("./tests/test_dir");
 
-    let res = copy_files(dir_source, dir_destination);
-    match res {
-        Ok(r) => assert_eq!(r, ()),
-        Err(e)=> panic!("{} something wrong", e),
-    }
+    let res = move_files(dir_source, dir_destination);
+
+    assert!(res.is_ok());
 }
 
 #[test]
 fn test_split_dir() {
-    use quicksplit_rs::new_dir;
+    use quicksplit_rs::new_dir_name;
     let test_dir_split = "test-dir-split";
-    let split_dir = new_dir(String::from(test_dir_split));
+    let split_dir = new_dir_name(String::from(test_dir_split));
 
     assert_eq!(split_dir, String::from("test/dir/split/"));
 }
 
-// What are the different things we need to do and therefore to test?
-// todo: 2/ split the input dir along the "-" character into a vec of strings
-// todo: 3/ create an output dir that will take the previous strings and turn them to a
-// directory structure, i.e. 2024-03 into 2024/03
-// todo: 3-bis/ ensure that we don't override an already partially existing structure, i.e.
-// if 2024/02 exists, we are not going to delete it.
-// todo: 4/ move all files from the given input dir into the newly created directory structure,
-// which means that 2024-03/test.txt will be into 2024/03/test.txt
-// todo: 5/ refactor to use crate:: instead of quicksplit.rs
+#[test]
+fn test_mk_dir() {
+    use quicksplit_rs::mk_dir;
+
+    let dir = String::from("./tests/new_dir");
+    let res = mk_dir(dir.clone());
+
+    assert!(res.is_ok());
+
+    let path = Path::new(dir.as_str());
+    assert!(path.exists());
+}
+
