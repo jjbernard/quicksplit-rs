@@ -56,6 +56,9 @@ pub fn move_files(from: &String, to: &String) -> std::io::Result<()> {
     Ok(())
 }
 
+// Leave this method here, but it is not useful, since calling
+// fs::rename() in the move_files() function will delete the
+// source directory
 pub fn rm_dir(dir: &String) -> std::io::Result<()> {
     fs::remove_dir(&dir.as_str())?;
     Ok(())
@@ -77,16 +80,7 @@ pub fn run() {
                 Ok(()) => {
                     let res_move = move_files(&f, &new_dir);
                     match res_move {
-                        Ok(()) => {
-                            let res_rm = rm_dir(&f);
-                            match res_rm {
-                                Ok(()) => continue,
-                                _ => {
-                                    eprintln!("Error removing directory");
-                                    continue;
-                                }
-                            }
-                        }
+                        Ok(()) => continue,
                         _ => {
                             eprintln!("Error moving file");
                             continue;
